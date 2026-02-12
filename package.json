@@ -1,0 +1,43 @@
+{
+  "name": "@chocbite/ts-lib-settings",
+  "version": "1.0.0",
+  "description": "UI settings handler for TypeScript",
+  "author": "chocolateandmilkwin",
+  "license": "MIT",
+  "type": "module",
+  "private": false,
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "vite --port 9951",
+    "build": "tsup src/index.ts --format esm --dts",
+    "lint": "eslint src/**/*.ts",
+    "test": "vitest run",
+    "prepublishOnly": "npm run build"
+  },
+  "devDependencies": {
+    "@vitest/browser-playwright": "^4.0.0",
+    "eslint": "^9.0.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.0.0",
+    "typescript-eslint": "^8.0.0",
+    "vite": "^7.0.0",
+    "vitest": "^4.0.0"
+  },
+  "dependencies": {
+    "@chocbite/ts-lib-result": "^1.0.0",
+    "@chocbite/ts-lib-state": "^1.0.0"
+  }
+}
