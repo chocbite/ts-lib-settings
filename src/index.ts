@@ -1,5 +1,5 @@
 import type { Option, ResultOk } from "@chocbite/ts-lib-result";
-import type { StateROAWA } from "@chocbite/ts-lib-state";
+import type { StateROAW } from "@chocbite/ts-lib-state";
 
 let name_transformer: ((name: string) => string) | undefined;
 export const settings_set_name_transform = (
@@ -51,10 +51,10 @@ export const settings_init = (
 };
 
 class Setting {
-  readonly state: StateROAWA<any>;
+  readonly state: StateROAW<any>;
   readonly name: string;
   readonly description: string;
-  constructor(state: StateROAWA<any>, name: string, description: string) {
+  constructor(state: StateROAW<any>, name: string, description: string) {
     this.state = state;
     this.name = name;
     this.description = description;
@@ -145,7 +145,7 @@ export class SettingsGroup {
     id: string,
     name: string,
     description: string,
-    state: StateROAWA<READ>,
+    state: StateROAW<READ>,
   ) {
     if (id in this.settings)
       throw new Error("Settings already registered " + this.path_id + "/" + id);
@@ -165,7 +165,7 @@ export class SettingsGroup {
     id: string,
     name: string,
     description: string,
-    state: StateROAWA<READ>,
+    state: StateROAW<READ>,
     transform: (state: ResultOk<READ>) => TYPE,
   ) {
     if (id in this.settings)
