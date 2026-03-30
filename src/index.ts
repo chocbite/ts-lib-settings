@@ -151,7 +151,7 @@ export class SettingsGroup {
       throw new Error("Settings already registered " + this.path_id + "/" + id);
     this.settings[id] = new Setting(state, name, description);
     state.sub((value) => {
-      localStorage[this.path_id + "/" + id] = JSON.stringify(value.unwrap);
+      localStorage[this.path_id + "/" + id] = JSON.stringify(value.value);
     });
   }
 
