@@ -1,4 +1,4 @@
-import type { Option, ResultOk } from "@chocbite/ts-lib-result";
+import { ok, type Option, type ResultOk } from "@chocbite/ts-lib-result";
 import type { StateROAW } from "@chocbite/ts-lib-state";
 
 let name_transformer: ((name: string) => string) | undefined;
@@ -100,16 +100,16 @@ export class SettingsGroup {
   /**Gets value of setting or fallbacks to default
    * @param id unique identifier for this setting in the parent group
    * @param fallback value to use if no setting is stored
-   * @param version_changed function called when the version of the package changed to migrate old value to new formats
-   */
-  get<TYPE>(
+   * @param check function to check if the stored value is valid, if not the fallback will be used
+   * @param version_changed function called when the version of the package changed to migrate old value to new formats */
+  get<T>(
     id: string,
-    fallback: TYPE,
-    check?: (parsed: unknown) => Option<TYPE>,
-    version_changed?: (existing: string, oldVersion: string) => TYPE,
-  ): TYPE {
+    fallback: T,
+    check?: (parsed: unknown) => Option<T>,
+    version_changed?: (existing: string, oldVersion: string) => T,
+  ): ResultOk<T> {
     const saved = localStorage.getItem(this.path_id + "/" + id);
-    if (saved === null) return fallback;
+    if (saved === null) return ok(fallback);
     try {
       if (this.version_changed && version_changed) {
         const changed_value = version_changed(saved, this.version_changed);
@@ -117,12 +117,12 @@ export class SettingsGroup {
           this.path_id + "/" + id,
           JSON.stringify(changed_value),
         );
-        return changed_value;
+        return ok(changed_value);
       }
-      if (check) return check(JSON.parse(saved)).unwrap_or(fallback);
-      return JSON.parse(saved) as TYPE;
+      if (check) return ok(check(JSON.parse(saved)).unwrap_or(fallback));
+      return ok(JSON.parse(saved) as T);
     } catch (e) {
-      return fallback;
+      return ok(fallback);
     }
   }
 
@@ -139,40 +139,21 @@ export class SettingsGroup {
    * @param id unique identifier for this setting in the parent group
    * @param name name of setting formatted for user reading
    * @param description a description of what the setting is about formatted for user reading
-   * @param state initial value for the setting, use a promise for an eager async value, use a function returning a promise for a lazy async value
-   */
-  register<READ>(
+   * @param state state object representing the setting's value */
+  register<READ, TYPE = READ>(
     id: string,
     name: string,
     description: string,
     state: StateROAW<READ>,
+    transform?: (state: ResultOk<READ>) => TYPE,
   ) {
     if (id in this.settings)
       throw new Error("Settings already registered " + this.path_id + "/" + id);
     this.settings[id] = new Setting(state, name, description);
     state.sub((value) => {
-      localStorage[this.path_id + "/" + id] = JSON.stringify(value.value);
-    });
-  }
-
-  /**Registers a state to a setting
-   * @param id unique identifier for this setting in the parent group
-   * @param name name of setting formatted for user reading
-   * @param description a description of what the setting is about formatted for user reading
-   * @param state initial value for the setting, use a promise for an eager async value, use a function returning a promise for a lazy async value
-   */
-  register_transform<READ, TYPE>(
-    id: string,
-    name: string,
-    description: string,
-    state: StateROAW<READ>,
-    transform: (state: ResultOk<READ>) => TYPE,
-  ) {
-    if (id in this.settings)
-      throw new Error("Settings already registered " + this.path_id + "/" + id);
-    this.settings[id] = new Setting(state, name, description);
-    state.sub((value) => {
-      localStorage[this.path_id + "/" + id] = JSON.stringify(transform(value));
+      localStorage[this.path_id + "/" + id] = JSON.stringify(
+        transform ? transform(value) : value.value,
+      );
     });
   }
 }
