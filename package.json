@@ -1,6 +1,6 @@
 {
   "name": "@chocbite/ts-lib-settings",
-  "version": "1.3.1",
+  "version": "1.3.2",
   "description": "UI settings handler for TypeScript",
   "author": "chocolateandmilkwin",
   "license": "MIT",
@@ -40,6 +40,6 @@
   },
   "dependencies": {
     "@chocbite/ts-lib-result": "^1.3.0",
-    "@chocbite/ts-lib-state": "^1.3.0"
+    "@chocbite/ts-lib-state": "^1.3.1"
   }
 }
