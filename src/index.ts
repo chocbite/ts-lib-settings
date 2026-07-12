@@ -151,9 +151,9 @@ export class SettingsGroup {
       throw new Error("Settings already registered " + this.path_id + "/" + id);
     this.settings[id] = new Setting(state, name, description);
     st.v.viewer(state, () => {
-      localStorage[this.path_id + "/" + id] = JSON.stringify(
-        transform ? transform(state) : state.to_json(),
-      );
+      localStorage[this.path_id + "/" + id] = transform
+        ? transform(state)
+        : state.to_json();
     });
   }
 }

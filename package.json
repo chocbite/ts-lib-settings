@@ -1,6 +1,6 @@
 {
   "name": "@chocbite/ts-lib-settings",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "UI settings handler for TypeScript",
   "author": "chocolateandmilkwin",
   "license": "MIT",
