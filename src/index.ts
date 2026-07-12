@@ -140,20 +140,20 @@ export class SettingsGroup {
    * @param name name of setting formatted for user reading
    * @param description a description of what the setting is about formatted for user reading
    * @param state state object representing the setting's value */
-  register<READ, TYPE = READ>(
+  register<READ>(
     id: string,
     name: string,
     description: string,
     state: StateROAW<READ>,
-    transform?: (state: StateROAW<READ>) => TYPE,
+    transform?: (state: StateROAW<READ>) => PromiseLike<string>,
   ) {
     if (id in this.settings)
       throw new Error("Settings already registered " + this.path_id + "/" + id);
     this.settings[id] = new Setting(state, name, description);
-    st.v.viewer(state, () => {
-      localStorage[this.path_id + "/" + id] = transform
+    st.v.viewer(state, async () => {
+      localStorage[this.path_id + "/" + id] = await (transform
         ? transform(state)
-        : state.to_json();
+        : state.to_json());
     });
   }
 }
