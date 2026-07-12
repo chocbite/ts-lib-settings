@@ -1,6 +1,6 @@
 {
   "name": "@chocbite/ts-lib-settings",
-  "version": "1.5.0",
+  "version": "2.0.0",
   "description": "UI settings handler for TypeScript",
   "author": "chocolateandmilkwin",
   "license": "MIT",
@@ -32,16 +32,16 @@
     "upgrade": "npx npm-check-updates --target semver -u && npm install"
   },
   "devDependencies": {
-    "@chocbite/ts-supplement-eslint": "^1.0.2",
-    "@vitest/browser-playwright": "^4.1.4",
-    "eslint": "^10.2.0",
-    "tsdown": "^0.21.8",
-    "typescript": "^6.0.2",
-    "vite": "^8.0.8",
-    "vitest": "^4.1.4"
+    "@chocbite/ts-supplement-eslint": "^1.0.4",
+    "@vitest/browser-playwright": "^4.1.10",
+    "eslint": "^10.7.0",
+    "tsdown": "^0.21.10",
+    "typescript": "^6.0.3",
+    "vite": "^8.1.4",
+    "vitest": "^4.1.10"
   },
   "dependencies": {
     "@chocbite/ts-lib-result": "^1.4.1",
-    "@chocbite/ts-lib-state": "^2.2.0"
+    "@chocbite/ts-lib-state": "^2.3.0"
   }
 }

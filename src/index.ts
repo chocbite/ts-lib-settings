@@ -1,5 +1,5 @@
 import { ok, type Option, type ResultOk } from "@chocbite/ts-lib-result";
-import type { StateROAW } from "@chocbite/ts-lib-state";
+import st, { type StateROAW } from "@chocbite/ts-lib-state";
 
 let name_transformer: ((name: string) => string) | undefined;
 export const settings_set_name_transform = (
@@ -145,14 +145,14 @@ export class SettingsGroup {
     name: string,
     description: string,
     state: StateROAW<READ>,
-    transform?: (state: ResultOk<READ>) => TYPE,
+    transform?: (state: StateROAW<READ>) => TYPE,
   ) {
     if (id in this.settings)
       throw new Error("Settings already registered " + this.path_id + "/" + id);
     this.settings[id] = new Setting(state, name, description);
-    state.sub((value) => {
+    st.v.viewer(state, () => {
       localStorage[this.path_id + "/" + id] = JSON.stringify(
-        transform ? transform(value) : value.value,
+        transform ? transform(state) : state.to_json(),
       );
     });
   }
