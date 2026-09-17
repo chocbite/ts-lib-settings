@@ -140,13 +140,13 @@ export class SettingsGroup {
    * @param name name of setting formatted for user reading
    * @param description a description of what the setting is about formatted for user reading
    * @param state state object representing the setting's value */
-  register<READ>(
+  register<READ, S extends StateROAW<READ>>(
     id: string,
     name: string,
     description: string,
-    state: StateROAW<READ>,
-    transform?: (state: StateROAW<READ>) => PromiseLike<string>,
-  ) {
+    state: S,
+    transform?: (state: S) => PromiseLike<string>,
+  ): S {
     if (id in this.settings)
       throw new Error("Settings already registered " + this.path_id + "/" + id);
     this.settings[id] = new Setting(state, name, description);
@@ -155,5 +155,6 @@ export class SettingsGroup {
         ? transform(state)
         : state.to_json());
     });
+    return state;
   }
 }
